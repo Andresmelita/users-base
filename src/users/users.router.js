@@ -3,11 +3,13 @@ const passportJWT = require('../middleware/auth.middleware')
 
 const userServices = require('./users.services')
 
-router.get("/", passportJWT.authenticate('jwt', {session: false}), userServices.getAllUsers) //? /api/v1/users
-router.post("/", userServices.postUser) //? /api/v1/users
 
-router.get("/:id", userServices.getUserById) //? /api/v1/users/:id
-router.patch('/:id', userServices.patchUser) //? /api/v1/users/:id
-router.delete('/:id', userServices.deleteUser) //? /api/v1/users/:id
+//? /api/v1/users
+router.get("/", passportJWT.authenticate('jwt', {session: false}), userServices.getAllUsers) 
+router.post("/", userServices.postUser)
+
+router.get("/:id", userServices.getUserById)
+router.patch('/:id', userServices.patchUser)
+router.delete('/:id', userServices.deleteUser)
 
 module.exports = router
