@@ -1,0 +1,70 @@
+const Users = require('../models/users.models')
+const uuid = require('uuid')
+
+//* Se realiza importación del método que encripta contraseña
+const { hashPassword } = require('../utils/crypto')
+
+const findAllUsers = async () => {
+    const data = await Users.findAll()
+    return data
+}
+
+const findUserById = async (id) => {
+    const data = await Users.findOne({
+        where: {
+            id: id
+        }
+    })
+    return data
+}
+
+//* controlador que permite filtrar por email
+const findUserByEmail = async (email) => {
+    const data = await Users.findOne({
+        where: {
+            email: email
+        }
+    })
+    return data 
+}
+
+const createUser = async (obj) => {
+    const data = await Users.create({
+        id: uuid.v4(),
+        first_name: obj.first_name,
+        last_name: obj.last_name,
+        user_name: obj.user_name,
+        email: obj.email,
+        password: hashPassword(obj.password), //*Encriptación
+        age: obj.age,
+        country: obj.country
+    })
+    return data
+}
+
+const updateUser = async (id, obj) => {
+    const data = await Users.update(obj, {
+        where: {
+            id: id
+        }
+    })
+    return data[0] //? Retorna un arreglo, este arreglo puede lucir de estas 2 maneras [1], [0]
+}
+
+const deleteUser = async (id) => {
+    const data = await Users.destroy({
+        where: {
+            id: id
+        }
+    })
+    return data //? Retorna 1 en caso de que se haya eliminado, o 0 en caso de que el id no exista
+}
+
+module.exports = {
+    findAllUsers,
+    findUserById,
+    findUserByEmail,
+    createUser,
+    updateUser,
+    deleteUser
+}
